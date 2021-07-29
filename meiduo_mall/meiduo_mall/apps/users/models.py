@@ -5,7 +5,6 @@ from django.conf import settings
 
 from meiduo_mall.utils.models import BaseModel
 
-
 # Create your models here.
 class User(AbstractUser):
     """自定义用户模型类"""
