@@ -18,6 +18,7 @@ from .models import User, Address
 from goods.models import SKU
 from carts.utils import merge_cart_cookie_to_redis
 
+
 # Create your views here.
 
 class UserView(CreateAPIView):
