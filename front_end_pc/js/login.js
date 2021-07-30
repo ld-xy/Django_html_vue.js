@@ -13,7 +13,7 @@ var vm = new Vue({
         // 获取url路径参数
         get_query_string: function (name) {
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-            var r = window.location.search.substr(1).match(reg);
+            var r = window.location.search.substr(1).match(reg);   //将匹配到的？删去
             if (r != null) {
                 return decodeURI(r[2]);
             }
@@ -35,6 +35,7 @@ var vm = new Vue({
                 this.error_pwd = false;
             }
         },
+
         // 表单提交
         on_submit: function () {
             this.check_username();
@@ -51,13 +52,13 @@ var vm = new Vue({
                     .then(response => {
                         // 使用浏览器本地存储保存token
                         if (this.remember) {
-                            // 记住登录
+                            // 记住登录  永久记住
                             sessionStorage.clear();
                             localStorage.token = response.data.token;
                             localStorage.user_id = response.data.user_id;
                             localStorage.username = response.data.username;
                         } else {
-                            // 未记住登录
+                            // 不记住登录  关闭网页就清除
                             localStorage.clear();
                             sessionStorage.token = response.data.token;
                             sessionStorage.user_id = response.data.user_id;
@@ -71,8 +72,9 @@ var vm = new Vue({
                         }
                         location.href = return_url;   // 跨域问题只有在加载和重定向才存在，像img标签，a标签内的链接不叫跨域
                     })
+
                     .catch(error => {
-                        if (error.response.status == 400) {
+                        if (error.response.status === 400) {
                             this.error_pwd_message = '用户名或密码错误';
                         } else {
                             this.error_pwd_message = '服务器错误';
@@ -81,7 +83,8 @@ var vm = new Vue({
                     })
             }
         },
-        // qq登 录
+
+        // qq登录
         qq_login: function () {
             var next = this.get_query_string('next') || '/';
             axios.get(this.host + '/oauth/qq/authorization/?next=' + next, {
